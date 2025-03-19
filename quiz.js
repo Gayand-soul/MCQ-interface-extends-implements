@@ -63,12 +63,12 @@ const questions = [
 
     },
     {
-        question:"Hur anger man en standardparameter i en TypeScript-funktion? ",
+        question:"Vilken är den korrekta syntaxen för att ange en standardparameter i en TypeScript-funktion? ",
         answers: [
-            {text:`function greet(name = "Guest") { ... }`, correct: true},
-            {text:`function greet(name ?: "Guest") { ... }`, correct: false},
-            {text:`function greet(name : "Guest" = string) { ... }`, correct: false},
-            {text:`function greet(name == "Guest") { ... }`, correct: false},
+            {text:`function sayHello(user: string = "Användare") { ... }`, correct: true},
+            {text:`function sayHello(user ?= "Användare") { ... } `, correct: false},
+            {text:`function sayHello(user: "Användare" = string) { ... }`, correct: false},
+            {text:`function sayHello(user == "Användare") { ... }`, correct: false},
         ]
 
     },
@@ -277,7 +277,7 @@ const questions = [
                  
                 }
 
-                interface B extends A {
+                interface B extends User {
                     y: number;
                 }
 
@@ -402,41 +402,36 @@ const questions = [
 
     },
     {
-        question: "Vad händer om en klass implementerar ett gränssnitt men inte definierar alla egenskaper/metoder?",
-        code: ` interface Vehicle {
-                    speed: number;
-                    drive(): void;
+        question: "Vad blir utdata från följande kodsnutt?",
+        code: ` function getUserName(name?: string) {
+                    return name ?? "Okänd användare";
                 }
 
-                class Car implements Vehicle {
-                speed = 100;
-                }
-
-                const myCar = new Car();
-                console.log(myCar.speed); `,
+                console.log(getUserName(undefined));
+                console.log(getUserName(null));
+                console.log(getUserName("Alice"));`,
         answers: [
-            {text:"Kompileringsfel: Klassen måste implementera drive()", correct: true},
-            {text:"100 skrivs ut i konsolen", correct: false},
-            {text:"Programmet körs men drive() returnerar undefined", correct: false},
-            {text:"Klassen ärver drive() automatiskt", correct: false},
+            {text:` "null", "null", "Alice"`, correct: false},
+            {text:`"undefined", "null", "Alice"`, correct: false},
+            {text:"Error: Kan inte använda ?? på null eller undefined", correct: false},
+            {text: `"Okänd användare", "Okänd användare", "Alice"`, correct: true},
         ]
 
     },
     {
-        question: "Vad händer om vi försöker skapa ett objekt av denna klass?",
-        code: ` interface Vehicle {
-                    speed: number;
-                    drive(): void;
+        question: "Vad blir utdata från följande kodsnutt?",
+        code: `function getSpeed(speed?: number) {
+                    return speed ?? 50;
                 }
-
-                class Car implements Vehicle {
-                    speed = 120;
-                }`,
+                console.log(getSpeed(0));
+                console.log(getSpeed(undefined));
+                console.log(getSpeed(null));
+                console.log(getSpeed(80));`,
         answers: [
-            {text:"Kompileringsfel: Klassen måste implementera drive().", correct: true},
-            {text:"Koden fungerar korrekt.", correct: false},
-            {text:"speed blir undefined.", correct: false},
-            {text:"drive() anropas automatiskt.", correct: false},
+            {text:`"50", "50", "50", "80"`, correct: false},
+            {text:`"undefined", "50", "50", "80"`, correct: false},
+            {text:`"0", "50", "50", "80"`, correct: true},
+            {text:`"0", "undefined", "undefined", "80"`, correct: false},
         ]
 
     },
